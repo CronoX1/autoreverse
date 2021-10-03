@@ -4,7 +4,7 @@ If you are tired of googling "pentestmonkey reverse shell cheat sheet" copying a
 
 # How to install it
 
-Download the script
+1. Download the script
 
 ```
 
@@ -12,7 +12,7 @@ wget https://raw.githubusercontent.com/CronoX1/Pentestmonkey-Reverse-Shell/main/
 
 ```
 
-Give it the right permissions
+2. Give it the right permissions
 
 ```
 
@@ -20,7 +20,7 @@ chmod +x autoreverse.sh
 
 ```
 
-Create a symbolic link to use the tool in all directories
+3. Create a symbolic link to use the tool in all directories
 
 ```
 
