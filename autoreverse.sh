@@ -56,5 +56,3 @@ if [ "$reverse" == "perl" ]; then
 echo ""
 echo $perl
 fi
-
-echo ""
