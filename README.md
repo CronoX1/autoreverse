@@ -23,7 +23,7 @@ ln -s /full/path/of/autoreverse.sh /usr/local/bin/autoreverse
 ```
 # How to use it
 
-![alt text](https://github.com/CronoX1/Pentestmonkey-Reverse-Shell/blob/main/images/usage-example.png)
+![alt text](https://github.com/CronoX1/Pentestmonkey-Reverse-Shell/blob/main/images/usage.png)
 
 # NOTES
 
