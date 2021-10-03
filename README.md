@@ -8,7 +8,7 @@ wget https://raw.githubusercontent.com/CronoX1/Pentestmonkey-Reverse-Shell/main/
 
 chmod +x autoreverse.sh
 
-ln -s /full/path/to/your/autoreverse.sh /usr/local/bin/autoreverse
+ln -s /full/path/of/autoreverse.sh /usr/local/bin/autoreverse
 
 # How to use it
 
