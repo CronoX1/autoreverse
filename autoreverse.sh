@@ -4,7 +4,7 @@
 #Configuration of the reverse shell
 
 
-echo -ne "Port to listen: " && read PORT
+echo -ne "Listening Port: " && read PORT
 
 echo ""
 
