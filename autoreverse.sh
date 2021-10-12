@@ -7,7 +7,7 @@ red="\e[1;31m"
 green="\e[1;32m"
 blue="\e[1;34m"
 hackergreen="\e[0;32m"
-purple="\e[0;35"
+purple="\e[1;35m"
 
 #Configuration of the reverse shell
 
@@ -16,11 +16,15 @@ echo -ne "${blue}Listening Port:${boring} " && read PORT
 
 echo ""
 
+echo -ne "${green}Those are your IP addresses:${purple}\n"
+
+echo ""
+
 hostname -I
 
 echo ""
 
-echo -ne "${blue}Choose your IP address:${boring} "  && read IP
+echo -ne "${blue}Choose your IP address from above:${boring} "  && read IP
 
 echo ""
 
