@@ -35,4 +35,4 @@ ln -s /full/path/of/autoreverse.sh /usr/local/bin/autoreverse
 
 # NOTES
 
-This is my first script (still in development).
+This is my first script (still in development) If you have any idea to improve it, let me know!! 
