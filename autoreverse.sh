@@ -77,7 +77,9 @@ echo -ne "${green}We have copied it for you!!! Paste it wherever you want:)${bor
 
 echo ""
 
+
 #Display of the listener (netcat)
+
 
 echo -ne "${hackergreen}Waiting to say I'm in...${boring}"
 
