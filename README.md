@@ -29,7 +29,7 @@ chmod +x autoreverse.sh
 ```
 ln -s /full/path/of/autoreverse.sh /usr/local/bin/autoreverse
 ```
-# How to use it
+# Usage
 
 ![alt text](https://github.com/CronoX1/Pentestmonkey-Reverse-Shell/blob/main/images/usage.png)
 
