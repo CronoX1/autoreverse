@@ -9,6 +9,7 @@ blue="\e[1;34m"
 hackergreen="\e[0;32m"
 purple="\e[1;35m"
 
+
 #Configuration of the reverse shell
 
 
