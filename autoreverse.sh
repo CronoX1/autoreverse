@@ -25,7 +25,7 @@ hostname -I
 
 echo ""
 
-echo -ne "${blue}Choose your IP address from above:${boring} "  && read IP
+echo -ne "${blue}Choose the IP address you want to use from above:${boring} "  && read IP
 
 echo ""
 
