@@ -6,7 +6,7 @@ boring="\e[0m" #no colour
 red="\e[1;31m"
 green="\e[1;32m"
 blue="\e[1;34m"
-hackergreen="\e[0;32m"
+hackergreen="\e[0;32m" #dark green
 purple="\e[1;35m"
 
 
