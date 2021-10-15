@@ -15,7 +15,7 @@ apt-get install xclip
 1. Download the script
 
 ```
-wget https://raw.githubusercontent.com/CronoX1/Pentestmonkey-Reverse-Shell/main/autoreverse.sh
+wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.sh
 ```
 
 2. Give it the right permissions
