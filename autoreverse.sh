@@ -70,7 +70,7 @@ fi
 echo ""
 
 if [ "$reverse" = "all" ];then
-echo -ne "\n${purple} [+] ${blue}rm ${boring}= ${green}$rm \n\n ${purple}[+] ${blue}bash = ${green}$bash ${purple} \n\n [+] ${blue}nc = ${green}$nc \n\n ${purple}[+] ${blue}python = ${green}$python \n\n ${purple}[+] ${blue}php = ${green}$php"
+echo -ne "\n${purple} [+] ${blue}rm ${boring}= ${green}$rm \n\n ${purple}[+] ${blue}bash = ${green}$bash ${purple} \n\n [+] ${blue}nc = ${green}$nc \n\n ${purple}[+] ${blue}python = ${green}$python \n\n ${purple}[+] ${blue}php = ${green}$php\n\n"
 fi
 
 if [ "$reverse" = "rm" ]; then
