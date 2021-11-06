@@ -64,7 +64,7 @@ echo -ne "${green}Those are your reverse shells command lines${boring}\n"
 fi
 
 if [ $reverse = "php" ]; then
-echo "php" > reverse.php | echo -ne "${red}The file reverse.php is ready to upload and located in ${green}" ; pwd
+echo -ne $php > reverse.php | echo -ne "${red}The file reverse.php is ready to upload and located in ${green}" ; pwd
 fi
 
 echo ""
