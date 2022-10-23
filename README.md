@@ -7,7 +7,7 @@ If you are tired of googling "pentestmonkey reverse shell cheat sheet" copying a
 You will need to have "xclip" installed. If you don't have it, install it with this:
 
 ```
-apt-get install xclip
+pip3 install simple_colors
 ```
 
 ## How to install it
@@ -15,24 +15,22 @@ apt-get install xclip
 1. Download the script
 
 ```
-wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.sh
+wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.py
 ```
 
-2. Give it the right permissions
+2. Create a symbolic link to use the tool in all directories
 
 ```
-chmod +x autoreverse.sh
-```
-
-3. Create a symbolic link to use the tool in all directories
-
-```
-ln -s /full/path/of/autoreverse.sh /usr/local/bin/autoreverse
+ln -s /full/path/of/autoreverse.py /usr/local/bin/autoreverse.py
 ```
 ## Usage
+
+```
+autoreverse.py -I <network interface> -P <Port> -p <payload> -l <listener>
+```
 
 ![alt text](https://github.com/CronoX1/Pentestmonkey-Reverse-Shell/blob/main/images/usage.png)
 
 ## NOTES
 
-This is my first script (still in development) If you have any idea to improve it, let me know!! 
+If you have any idea to improve it, let me know!! 
