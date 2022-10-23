@@ -26,7 +26,7 @@ ln -s /full/path/of/autoreverse.py /usr/local/bin/autoreverse.py
 ## Usage
 
 ```
-autoreverse.py -I <network interface> -P <Port> -p <payload> -l <listener>
+autoreverse.py -I <network interface> -P <port> -p <payload> -l <listener>
 ```
 
 ![alt text](https://github.com/CronoX1/Pentestmonkey-Reverse-Shell/blob/main/images/autoreverse.png)
