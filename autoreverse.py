@@ -111,4 +111,8 @@ if args.listener != None:
         msf_list()
         exit()
 
+if os.path.exists('/usr/local/bin/autoreverse.py') == False:
+    ActualPath = os.popen('pwd').read().replace('\n', '')
+    os.system('ln -s ' + ActualPath + '/autoreverse.py /usr/local/bin/autoreverse.py')
+
 Configure()
