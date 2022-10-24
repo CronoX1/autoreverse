@@ -13,7 +13,7 @@ ap.add_argument('-p', '--payload', required=True, type=str, help='Select the pay
 
 ap.add_argument('-l', '--listener', required=False, type=str, help='Create a listener with netcat or metasploit (meterpreter): nc or msf (msf only works with .exe, .dll and .elf payloads).')
 
-ap.add_argument('-a', '--architecture', required=False, type=str, help='Define the architecture of the machine: x64 or x86 (default value is x64).')
+ap.add_argument('-a', '--architecture', required=False, type=str, help='Define the architecture of the machine: x64 or x86 (default value is x64, only needed with .exe, .dll and .elf payloads).')
 
 args = ap.parse_args()
 
@@ -65,7 +65,7 @@ def Check_files(file):
         os.system('wget ' + filelink[file] + ' -O ' + path + file + ' 2>/dev/null')
         print(blue(file) + green(' downloaded.\n'))
 
-def Configure(IP = Get_IP(), PORT = str(args.port), payload = payload, msf = False, sys='64'):
+def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, sys='64'):
     if payload.isnumeric():
         print(red('The payload must be a string.'))
         exit()
