@@ -12,13 +12,13 @@ pip3 install simple_colors
 
 ## How to install it
 
-1. Download the script
+1. Download the script.
 
 ```
 wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.py
 ```
 
-2. Give it the right permisions so you can use it in all directories
+2. Give it the right permisions so you can use it in all directories.
 
 ```
 chmod +x autoreverse.py
