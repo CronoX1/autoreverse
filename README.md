@@ -18,10 +18,10 @@ pip3 install simple_colors
 wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.py
 ```
 
-2. Create a symbolic link to use the tool in all directories
+2. Give it the right permisions so you can use it in all directories
 
 ```
-ln -s /full/path/of/autoreverse.py /usr/local/bin/autoreverse.py
+chmod +x autoreverse.py
 ```
 ## Usage
 
