@@ -21,7 +21,8 @@ ActualPath = os.popen('pwd').read().replace('\n', '')
 
 payload = args.payload.lower()
 
-arch = args.architecture.lower()
+arch = str(args.architecture).lower()
+
 
 try:
     int(args.port)
