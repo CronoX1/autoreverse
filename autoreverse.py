@@ -187,7 +187,7 @@ if args.httpserver != None:
     os.system(server)
     time.sleep(0.03)
     process = os.popen('lsof -i -P -n | grep LISTEN | grep ' + str(args.httpserver) + ' | awk \'{print $1, $2}\'').read().replace('\n', '')
-    print(blue('\nHTTP server running on port ' + str(args.httpserver) + '. (Process: ' + process + ').'))
+    print(blue('\nHTTP server running on port ' + str(args.httpserver) + ' (Process: ' + process + ').'))
 if args.listener != None:
     Check_Port(args.port)
     listeners()
