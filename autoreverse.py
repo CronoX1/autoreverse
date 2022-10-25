@@ -146,8 +146,8 @@ if args.listener != None:
             Configure(msf = True)
         else:
             Configure(msf = True, arch = arch)
-            msf_list()
-            exit()
+        msf_list()
+        exit()
     else:
         print(red('Your listener option is not in the list, use "--help" to know the listeners list.'))
         exit()
