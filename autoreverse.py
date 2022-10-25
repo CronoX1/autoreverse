@@ -135,9 +135,9 @@ if args.listener != None:
         exit()
     if args.listener == 'nc' or args.listener == 'netcat':
         if arch == 'none':
-            Configure(arch = arch)
-        else:
             Configure()
+        else:
+            Configure(arch = arch)
         print(green('Waiting to say I\'m in...\n'))
         nc_list()
         exit()
