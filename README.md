@@ -26,7 +26,7 @@ chmod +x autoreverse.py
 ## Usage
 
 ```
-autoreverse.py -I <network interface> -P <port> -p <payload> -l <listener>
+autoreverse.py -I <network interface> -P <port> -p <payload> [-l] <listener> [-http] <http server port> [-a] <architecture>
 ```
 
 ![alt text](https://github.com/CronoX1/Pentestmonkey-Reverse-Shell/blob/main/images/autoreverse.png)
