@@ -4,7 +4,7 @@ If you are tired of googling "pentestmonkey reverse shell cheat sheet" copying a
 
 ## Requirements
 
-You will need to have "simeple_colors" and "rlwrap" installed. If you don't have it, install it with this:
+You will need to have "simple_colors" and "rlwrap" installed. If you don't have it, install it with this:
 
 ```
 pip3 install simple_colors && sudo apt-get install rlwrap
