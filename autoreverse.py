@@ -48,7 +48,7 @@ except:
 def Get_IP(NT = args.interface):
     IP = os.popen("ifconfig " + str(NT) + " 2>/dev/null | sed -n '2 p' | awk '{print $2}'").read().replace('\n', '')
     if IP == '':
-        print(red("Your network interface doesn't exists."))
+        print(red("Your network interface doesn't exist."))
         exit()
     else:
         return IP
