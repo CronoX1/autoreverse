@@ -88,6 +88,7 @@ def Check_files(file):
     if os.path.exists(path + file) == False:
         print('\nDownloading ' + blue(file) + ' in ' + path + '\n')
         os.system('wget ' + filelink[file] + ' -O ' + path + file + ' 2>/dev/null')
+        os.system('chmod 777 ' + path + file)
         print(blue(file) + green(' downloaded.\n'))
 
 def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
