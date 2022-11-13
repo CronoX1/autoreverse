@@ -25,7 +25,7 @@ wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.py
 |     Flag      |  Description  |
 | ------------- | ------------- |
 | -I, --interface   | Network Interface of the IP address you want to configure the payload  |
-| -P, --port  | Port for the reverse shell  |
+| -P, --port  | Port you want to use on the payload  |
 | -p, --payload  | The payload you want to use (php, bash, nc, oldnc, exe, dll, ps1, elf, war, apsx or python)  |
 | -l, --listener (optional)  | Create a listener on nc (netcat) or msf (meterpreter) |
 | -a, --architecture (optional) | Choose the architecture of the system (x86 = 32bits, x64 = 64bits) default value is x64. |
