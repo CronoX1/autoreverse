@@ -21,7 +21,7 @@ args = ap.parse_args()
 
 ActualPath = os.popen('pwd').read().replace('\n', '')
 
-print(yellow('Autoreverse made by CronoX\nhttps://github.com/CronoX1'))
+print(yellow('Autoreverse made by CronoX\n\nhttps://github.com/CronoX1\n--------------------------'))
 
 if os.path.exists('/usr/local/bin/autoreverse.py') == False:
     print(blue('\nCreating a symbolik link so you can use the tool in all directories (autoreverse.py).'))
