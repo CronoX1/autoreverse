@@ -31,6 +31,9 @@ wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.py
 |      dll      |
 |     python    |
 |      ps1      |
+|      elf      |
+|     aspx      |
+
 
 ## Usage
 
