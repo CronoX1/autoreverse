@@ -18,7 +18,13 @@ pip3 install simple_colors && sudo apt-get install rlwrap
 wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.py
 ```
 
-## Payloads list
+## Usage
+
+```
+autoreverse.py -I <network interface> -P <port> -p <payload> [-l] <listener> [-http] <http server port> [-a] <architecture>
+```
+
+![alt text](https://github.com/CronoX1/Pentestmonkey-Reverse-Shell/blob/main/images/autoreverse.png)
 
 | Payload list  | 
 | ------------- | 
@@ -31,14 +37,6 @@ wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.py
 |      dll      |
 |     python    |
 |      ps1      |
-
-## Usage
-
-```
-autoreverse.py -I <network interface> -P <port> -p <payload> [-l] <listener> [-http] <http server port> [-a] <architecture>
-```
-
-![alt text](https://github.com/CronoX1/Pentestmonkey-Reverse-Shell/blob/main/images/autoreverse.png)
 
 ## NOTES
 
