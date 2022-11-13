@@ -18,6 +18,20 @@ pip3 install simple_colors && sudo apt-get install rlwrap
 wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.py
 ```
 
+## Payloads list
+
+| Payload list  | 
+| ------------- | 
+|      PHP      | 
+|     bash      |
+|      war      |
+|      nc       |
+|     oldnc     |
+|      exe      |
+|      dll      |
+|     python    |
+|      ps1      |
+
 ## Usage
 
 ```
