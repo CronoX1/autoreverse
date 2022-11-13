@@ -18,14 +18,20 @@ pip3 install simple_colors && sudo apt-get install rlwrap
 wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.py
 ```
 
-## Help message
-
-| FLag          | desc |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
 
 ## Usage
+
+
+|     Flag      |  Description  |
+| ------------- | ------------- |
+| -I, --interface   | Network Interface  |
+| -P, --port  | Port for the reverse shell  |
+| -p, --payload  | The payload you want to use (php, bash, nc, oldnc, exe, dll, ps1, elf, war, apsx or python)  |
+| -l, --listener (optional)  | Create a listener on nc (netcat) or msf (meterpreter) |
+| -a, --architecture (optional) | Choose the architecture of the system (x86 = 32bits, x64 = 64bits) default value is x64. |
+| -http, --httpserver (optional) | Create an HTTP server to upload the file with command injection  |
+
+### Example
 
 ```
 autoreverse.py -I <network interface> -P <port> -p <payload> [-l] <listener> [-http] <http server port> [-a] <architecture>
