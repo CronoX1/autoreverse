@@ -20,16 +20,16 @@ wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.py
 
 ## Payloads available
 
-|      Web      |     System    |
-| ------------- | ------------- | 
-|      PHP      |     Bash      | 
-|      aspx     |     nc        |
-|      war      |      oldnc    |
-                |      exe      |
-                |      dll      |
-                |      python   |
-                |      ps1      |
-                |      elf      |
+|      Web      ||     System    |
+| ------------- || ------------- | 
+|      PHP      ||     Bash      | 
+|      aspx     ||      nc       |
+|      war      ||      oldnc    |
+                ||      exe      |
+                ||      dll      |
+                ||      python   |
+                ||      ps1      |
+                ||      elf      |
 
 
 
