@@ -18,20 +18,12 @@ pip3 install simple_colors && sudo apt-get install rlwrap
 wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.py
 ```
 
-## Payloads available
+## Help message
 
-|      Web      ||     System    |
-| ------------- || ------------- | 
-|      PHP      ||     Bash      | 
-|      aspx     ||      nc       |
-|      war      ||      oldnc    |
-                ||      exe      |
-                ||      dll      |
-                ||      python   |
-                ||      ps1      |
-                ||      elf      |
-
-
+| FLag          | desc |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
 
 ## Usage
 
