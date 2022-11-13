@@ -1,6 +1,6 @@
 # Autoreverse
 
-This tool configure different payloads so you don't have to make it manually.
+This tool configure different payloads so you don't have to do it manually.
 
 ## Requirements
 
