@@ -1,6 +1,6 @@
 # Autoreverse
 
-If you are tired of googling "pentestmonkey reverse shell cheat sheet" copying and pasting the code and then configuring the IP and the port. THIS IS YOUR TOOL!!
+This tool configure different payloads automatically so you don't have to make it manually.
 
 ## Requirements
 
