@@ -33,7 +33,7 @@ ActualPath = os.popen('pwd').read().strip('\n')
 
 print(yellow('Autoreverse made by CronoX\n\nhttps://github.com/CronoX1\n--------------------------'))
 
-if os.path.exists('/usr/local/bin/autoreverse.py') == False:
+if os.path.exists('/usr/local/bin/autoreverse') == False:
     print(blue('\nCreating a symbolik link so you can use the tool in all directories (autoreverse).'))
     os.system('dos2unix autoreverse.py 2>/dev/null')
     os.system('chmod +x autoreverse.py')
