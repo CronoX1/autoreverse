@@ -35,7 +35,6 @@ print(yellow('Autoreverse made by CronoX\n\nhttps://github.com/CronoX1\n--------
 
 if os.popen('which autoreverse').read().strip('\n') == '':
     print(blue('\nCreating a symbolik link so you can use the tool in all directories (autoreverse).'))
-    os.system('dos2unix autoreverse.py 2>/dev/null')
     os.system('chmod +x autoreverse.py')
     os.system('ln -s ' + ActualPath + '/autoreverse.py $(echo $(echo $PATH | cut -d ":" -f1)/autoreverse)')
 
