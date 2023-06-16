@@ -197,9 +197,6 @@ def Check_Port(port):
 
 def listeners():
     msf_payloads = ['exe', 'dll', 'elf', 'war', 'aspx']
-    if os.popen('ifconfig | grep "' + Get_IP() + '"').read().strip('\n') == '':
-        print(red('You can\'t create a listener with that IP Address.'))
-        exit()
     if args.listener == 'nc':
         if arch == 'none':
             Configure()
@@ -214,6 +211,9 @@ def listeners():
             print(red(' - ' + i))
         exit()
     elif args.listener == 'msf' or args.listener == 'metasploit':
+        if os.popen('ifconfig | grep "' + Get_IP() + '"').read().strip('\n') == '':
+            print(red('You can\'t create a meterpreter listener with that IP Address.'))
+            exit()
         if arch == 'none':
             Configure(msf = True)
         else:
