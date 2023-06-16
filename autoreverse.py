@@ -225,7 +225,7 @@ if args.httpserver != None:
     Check_Port(args.httpserver)
     os.system('python3 -m http.server ' + str(args.httpserver) + ' > /dev/null &')
     time.sleep(0.4)
-    process = os.popen('netstat -tulpn | grep "' + str(args.httpserver) + '" |tr -s "/" " " | awk \'{print $8, $7}\'').read().strip('\n')
+    process = os.popen('netstat -tulpn | grep ":' + str(args.httpserver) + '" |tr -s "/" " " | awk \'{print $8, $7}\'').read().strip('\n')
     print(blue('\nHTTP server running on port ' + str(args.httpserver) + ' (Process: ' + process + ').'))
 if args.listener != None:
     Check_Port(args.port)
