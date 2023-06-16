@@ -190,7 +190,8 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
 def Check_Port(port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     if s.connect_ex(('0.0.0.0', int(port))) == 0:
-        process = os.popen('netstat -ltnup | grep ":' + str(port) + '" | tr -s "/" " " | awk \'{print $8, $7}\'').read().strip('\n')
+        process = os.popen('netstat -ltnup | grep ":' + str(args.httpserver) + '" | tr -s "/" " " | awk \'{print $8, $7}\'').read().strip('\n')
+        time.sleep(0.4)
         print(red('The port is already being used by ' + process + '.'))
         exit()
 
@@ -223,8 +224,8 @@ def listeners():
 if args.httpserver != None:
     Check_Port(args.httpserver)
     os.system('python3 -m http.server ' + str(args.httpserver) + ' > /dev/null &')
-    time.sleep(0.07)
-    process = os.popen('netstat -ltnup | grep "80" |tr -s "/" " " | awk \'{print $8, $7}\'').read().strip('\n')
+    time.sleep(0.4)
+    process = os.popen('netstat -tulpn | grep "' + str(args.httpserver) + '" |tr -s "/" " " | awk \'{print $8, $7}\'').read().strip('\n')
     print(blue('\nHTTP server running on port ' + str(args.httpserver) + ' (Process: ' + process + ').'))
 if args.listener != None:
     Check_Port(args.port)
