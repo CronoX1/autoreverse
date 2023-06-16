@@ -7,17 +7,17 @@ ap = argparse.ArgumentParser()
 
 ap.add_argument('-I', '--interface', required=False, type=str, help='Select the network interface.')
 
+ap.add_argument('-i', '--ip', required=False, type=str, help='Select the IP Address')
+
 ap.add_argument('-P', '--port', required=True, type=str, help='Select the port you want to use.')
 
-ap.add_argument('-p', '--payload', required=True, type=str, help='Select the payload (php, bash, nc, oldnc, exe, dll, ps1, elf, war, aspx or python).')
+ap.add_argument('-p', '--payload', required=True, type=str, help='Select the payload (php, bash, nc, oldnc, exe, dll, ps1, elf, war, aspx, perl or python).')
 
 ap.add_argument('-l', '--listener', required=False, type=str, help='Create a listener with netcat or metasploit (meterpreter): nc or msf (msf only works with .exe, .dll, .aspx and .elf payloads).')
 
 ap.add_argument('-a', '--architecture', required=False, type=str, help='Define the architecture of the machine: x64 or x86 (default value is x64, only needed with .exe, .dll and .elf payloads).')
 
 ap.add_argument('-http', '--httpserver', required=False, type=str, help='Create an http server on the port you specified.')
-
-ap.add_argument('-i', '--ip', required=False, type=str, help='Select the IP Address')
 
 args = ap.parse_args()
 
