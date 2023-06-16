@@ -197,7 +197,10 @@ def Check_Port(port):
 
 def listeners():
     msf_payloads = ['exe', 'dll', 'elf', 'war', 'aspx']
-    if args.listener == 'nc' or args.listener == 'netcat':
+    if os.popen('ifconfig | grep "' + Get_IP() + '"').read().strip('\n') == '':
+        print(red('You can\'t create a listener with that IP Address.'))
+        exit()
+    if args.listener == 'nc':
         if arch == 'none':
             Configure()
         else:
