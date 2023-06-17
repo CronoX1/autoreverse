@@ -26,7 +26,7 @@ wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.py
 | ------------- | ------------- |
 | -I, --interface   | Network Interface of the IP address you want to configure the payload.  |
 | -P, --port  | The port you want to use on the payload.  |
-| -p, --payload  | The payload you want to use (php, bash, nc, oldnc, exe, dll, ps1, elf, war, apsx or python).  |
+| -p, --payload  | The payload you want to use (php, bash, nc, oldnc, exe, dll, ps1, elf, war, aspx or python).  |
 | -l, --listener (optional)  | Create a listener on nc (netcat) or msf (meterpreter). |
 | -a, --architecture (optional) | Choose the architecture of the system (x86 = 32bits, x64 = 64bits) default value is x64. |
 | -http, --httpserver (optional) | Create an HTTP server to upload the file with command injection.  |
