@@ -26,7 +26,7 @@ if os.getuid() != 0:
     exit()
 
 if args.interface == None and args.ip == None:
-    print(red('You must specify a network interface or an IP address.'))
+    print(red('You must specify a network interface or an IP address with "-I" or "-i".'))
     exit()
 
 ActualPath = os.popen('pwd').read().strip('\n')
