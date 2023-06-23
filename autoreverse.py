@@ -113,7 +113,7 @@ def Configure(IP = Get_IP(), PORT = str(args.port), msf = False, arch='64'):
     if msf == True:
         msfvenom = msfvenom.replace('shell_', 'meterpreter/')
     if (arch == 'x86' or arch == '86') and (payload == 'exe' or payload == 'dll'):
-        msfvenom = msfvenom.replace('/x64')
+        msfvenom = msfvenom.strip('/x64')
     elif arch == 'x86' or arch == '86':
         msfvenom = msfvenom.replace('x64', 'x86')
 
