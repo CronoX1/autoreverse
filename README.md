@@ -9,16 +9,6 @@ You will need to have "simple_colors" and "rlwrap" installed. If you don't have 
 ```
 pip3 install simple_colors && sudo apt-get install rlwrap
 ```
-
-## How to install it
-
-1. Download the script.
-
-```
-wget https://raw.githubusercontent.com/CronoX1/autoreverse/main/autoreverse.py
-```
-
-
 ## Usage
 
 
