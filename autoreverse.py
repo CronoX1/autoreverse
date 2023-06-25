@@ -29,7 +29,7 @@ if args.interface == None and args.ip == None:
     print(red('You must specify a network interface with "-I" or an IP address with "-i".'))
     exit()
 
-ActualPath = os.popen('pwd').read().strip('\n')
+ActualPath = os.getcwd()
 
 print(yellow('Autoreverse made by CronoX\n\nhttps://github.com/CronoX1\n--------------------------'))
 
