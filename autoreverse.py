@@ -22,7 +22,7 @@ ap.add_argument('-http', '--httpserver', required=False, type=str, help='Create 
 args = ap.parse_args()
 
 if os.getuid() != 0:
-    print(red('You must be root to run autoreverse'))
+    print(red('You must be root to run autoreverse.'))
     exit()
 
 if args.interface == None and args.ip == None:
