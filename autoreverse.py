@@ -60,10 +60,10 @@ def Get_IP(NT = args.interface):
     if args.ip:
         IP = args.ip
     else:
-        IP = os.popen("ifconfig " + str(NT) + " | sed -n '2 p' | awk '{print $2}'").read().strip('\n')
+        IP = os.popen("ifconfig " + str(NT) + " 2>/dev/null | sed -n '2 p' | awk '{print $2}'").read().strip('\n')
     patron = r'^(\d{1,3}\.){3}\d{1,3}$'
     if re.match(patron, IP) == None or IP == '':
-        print(red("Your network interface or IP address doesn't exist."))
+        print(red("Your network interface or IP address does not exist."))
         exit()
     else:
         return IP
@@ -190,7 +190,7 @@ def Check_Port(port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     if s.connect_ex(('0.0.0.0', int(port))) == 0:
         process = os.popen('netstat -ltnup | grep -e "0.0.0.0:' + str(args.httpserver) + '" | tr -s "/" " " | awk \'{print $8, $7}\'').read().strip('\n')
-        time.sleep(0.4)
+        time.sleep(1)
         print(red('The port is already being used by ' + process + '.'))
         exit()
 
@@ -226,7 +226,7 @@ def listeners():
 if args.httpserver != None:
     Check_Port(args.httpserver)
     os.system('python3 -m http.server ' + str(args.httpserver) + ' > /dev/null &')
-    time.sleep(0.4)
+    time.sleep(1)
     process = os.popen('netstat -tulpn | grep -e "0.0.0.0:' + str(args.httpserver) + '" |tr -s "/" " " | awk \'{print $8, $7}\'').read().strip('\n')
     print(blue('\nHTTP server running on port ' + str(args.httpserver) + ' (Process: ' + process + ').'))
 if args.listener != None:
