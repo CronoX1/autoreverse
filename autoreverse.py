@@ -33,7 +33,7 @@ ActualPath = os.getcwd()
 
 print(yellow('Autoreverse made by CronoX\n\nhttps://github.com/CronoX1\n--------------------------'))
 
-if os.popen('which autoreverse').read().strip('\n') == '':
+if os.popen('which autoreverse.py').read().strip('\n') == '':
     print(blue('\nCreating a symbolik link so you can use the tool in all directories (autoreverse.py).'))
     os.system('chmod +x autoreverse.py')
     os.system('ln -s ' + ActualPath + '/autoreverse.py $(echo $(echo $PATH | cut -d ":" -f1)/autoreverse.py)')
