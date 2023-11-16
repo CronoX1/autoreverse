@@ -14,7 +14,8 @@ pip3 install simple_colors && sudo apt-get install rlwrap
 
 |     Flag      |  Description  |
 | ------------- | ------------- |
-| -I, --interface   | Network Interface of the IP address you want to configure the payload.  |
+| -I, --interface   | Network interface of the IP address you want to use in the payload  |
+| -i, --ip   | The IP address you want to use the payload.  |
 | -P, --port  | The port you want to use on the payload.  |
 | -p, --payload  | The payload you want to use (php, bash, nc, oldnc, exe, dll, ps1, elf, war, aspx, perl or python).  |
 | -l, --listener (optional)  | Create a listener on nc (netcat) or msf (meterpreter). |
